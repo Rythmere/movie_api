@@ -1,60 +1,50 @@
 const express = require('express'),
-  morgan = require('morgan');
+  morgan = require('morgan'),
+  bodyParser =require('body-parser');
 const app = express();
-
-let topMovies = [
-  {
-    title: 'Your Name',
-    year: '2016'
-  },
-  {
-    title: 'A Silent Voice',
-    year: '2016'
-  },
-  {
-    title: 'Sword Art Online The Movie: Ordinal Scale',
-    year: '2017'
-  },
-  {
-    title: 'Sword Art Online Progressive: Aria of a Starless Night',
-    year: '2021'
-  },
-  {
-    title: 'My Hero Academia: Two Heroes',
-    year: '2018'
-  },
-  {
-    title: 'My Hero Academia: Two Heroes',
-    year: '2019'
-  },
-  {
-    title: 'My Hero Academia: World Heroes\' Mission',
-    year: '2021'
-  },
-  {
-    title: 'Dragon Ball Super: Broly',
-    year: '2018'
-  },
-  {
-    title: 'Anohana: The Flower We Saw That Day - The Movie',
-    year: '2013'
-  },
-  {
-    title: 'KonoSuba: God\'s Blessing on this Wonderful World! Legend of Crimson',
-    year: '2019'
-  }
-];
 
 app.use(morgan('common'));
 
 app.use(express.static('public'));
 
 app.get('/movies', (req, res) => {
-  res.json(topMovies);
+  res.send('Succesful GET request returning data of movies');
 });
 
 app.get('/', (req, res) => {
-  res.send('Movies');
+  res.send('Welcome to Movie api');
+});
+
+app.get('/movies/:title', (req, res) => {
+  res.send('Succesful Get request returning data on a movie by title');
+});
+
+app.get('/genres/:title', (req, res) => {
+  res.send('Succesful Get request returning data on a movie genre');
+});
+
+app.get('/directors/:name', (req, res) => {
+  res.send('Succesful Get request returning data on a movie director');
+});
+
+app.post('/user/:newuser', (req, res) => {
+  res.send('Succesful Post request adding new user info to the application');
+});
+
+app.put('/user/:username', (req, res) => {
+  res.send('Succesful PUT request updating the users information');
+});
+
+app.post('/favourites', (req, res) => {
+  res.send('Succesful Post request adding a movie to the users favourites');
+});
+
+app.delete('/favourites/:title', (req, res) => {
+  res.send('Succesful Delete request removing specified movie from users favourites');
+});
+
+app.delete('/user/:username', (req, res) => {
+  res.send('Succesful Delete request removing users data from the application');
 });
 
 app.use((err, req, res, next) => {

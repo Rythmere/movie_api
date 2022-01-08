@@ -9,5 +9,71 @@
     <h1>Movie Api</h1>
     <p>Movie Api allows a web application to acess information about movies, directors, genres, and actors.
     Users will be able to sign up, update their information, and create a list of favourite movies.</p>
+
+    <table>
+      <tr>
+        <th>Request</th>
+        <th>URL</th>
+        <th>HTTP Method</th>
+        <th>Response</th>
+      </tr>
+      <tr>
+        <td> Get a list of movies</td>
+        <td> /movies </td>
+        <td> GET </td>
+        <td> Returns a JSON list of movies </td>
+      </tr>
+      <tr>
+        <td> Get information about a specific movie </td>
+        <td> /movies/:title </td>
+        <td> GET </td>
+        <td> Returns JSON data about the specific movie </td>
+      </tr>
+      <tr>
+        <td> Get information about a specific genre of a movie </td>
+        <td> /genres/:title </td>
+        <td> GET </td>
+        <td> Returns json data of a description of the genre and a list of movies of that genre </td>
+      </tr>
+      <tr>
+        <td> Get information about a director </td>
+        <td> /directors/:name </td>
+        <td> GET </td>
+        <td> Returns JSON data about a specific director </td>
+      </tr>
+      <tr>
+        <td> Let a new user register </td>
+        <td> /user/:newuser </td>
+        <td> POST </td>
+        <td> Add new user data to the JSON data of users </td>
+      </tr>
+      <tr>
+        <td> Allow current users to update there account information </td>
+        <td> /user/:username </td>
+        <td> PUT </td>
+        <td> Updates the user JSON data with the changes requested by the user </td>
+      </tr>
+      <tr>
+        <td> Allows user to add a movie to a list of their favourites </td>
+        <td> /favourites </td>
+        <td> POST </td>
+        <td> Gives the user a message that the movies was added to favourites while updating the favourites list </td>
+      </tr>
+      <tr>
+        <td> Allows a user to remove a movie from their favourites </td>
+        <td> /favourites/:title </td>
+        <td> DELETE </td>
+        <td> Gives the user a message that the movie has been removed while updating the favourites list </td>
+      </tr>
+      <tr>
+        <td> Allows a user to delete their account </td>
+        <td> /user/:username </td>
+        <td> DELETE </td>
+        <td> Gives user a message that their account has been deleted while removing the account info from the users data </td>
+      </tr>
+
+
+
+    </table>
   </body>
 </html>
