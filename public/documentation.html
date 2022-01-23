@@ -16,6 +16,7 @@
         <th>URL</th>
         <th>HTTP Method</th>
         <th>Response</th>
+        <th>Example Response</th>
       </tr>
       <tr>
         <td> Get a list of movies</td>
@@ -28,48 +29,88 @@
         <td> /movies/:title </td>
         <td> GET </td>
         <td> Returns JSON data about the specific movie </td>
+        <td> "Genre":<br>
+          "Name": ----<br>
+          "Description": -----<br>
+          "Director":<br>
+          "Name": ----<br>
+          "Bio": -----<br>
+          "Birth": ----<br>
+          "_id": -------<br>
+          "Title": -----<br>
+          "Description": ----<br>
+          "ImagePath": ----<br>
+          "Featured": ----<br></td>
       </tr>
       <tr>
         <td> Get information about a specific genre of a movie </td>
         <td> /genres/:title </td>
         <td> GET </td>
         <td> Returns json data of a description of the genre and a list of movies of that genre </td>
+        <td> "Genre":<br>
+          "Name": ----<br>
+          "Description": ----<br></td>
       </tr>
       <tr>
         <td> Get information about a director </td>
         <td> /directors/:name </td>
         <td> GET </td>
         <td> Returns JSON data about a specific director </td>
+        <td> "Director":<br>
+          "Name": ----<br>
+          "Bio": ----<br>
+          "Birth": ----<br></td>
       </tr>
       <tr>
         <td> Let a new user register </td>
         <td> /user/:newuser </td>
         <td> POST </td>
-        <td> Add new user data to the JSON data of users </td>
+        <td> Add new user data to the JSON data of users and returns a json of new user data </td>
+        <td>"Username": ----<br>
+          "Password": ----<br>
+          "Email": ----<br>
+          "Birthday": xxxx/xx/xx<br>
+          "Favourites": []<br></Td>
       </tr>
       <tr>
         <td> Allow current users to update there account information </td>
         <td> /user/:username </td>
         <td> PUT </td>
         <td> Updates the user JSON data with the changes requested by the user </td>
+        <td>"Username": ----<br>
+          "Password": ----<br>
+          "Email": ----<br>
+          "Birthday": xxxx/xx/xx<br>
+          "Favourites": []<br></Td>
       </tr>
       <tr>
         <td> Allows user to add a movie to a list of their favourites </td>
         <td> /favourites </td>
         <td> POST </td>
         <td> Gives the user a message that the movies was added to favourites while updating the favourites list </td>
+        <td>"Username": ----<br>
+          "Password": ----<br>
+          "Email": ----<br>
+          "Birthday": xxxx/xx/xx<br>
+          "Favourites": [ObjectID]<br></Td>
       </tr>
       <tr>
         <td> Allows a user to remove a movie from their favourites </td>
         <td> /favourites/:title </td>
         <td> DELETE </td>
         <td> Gives the user a message that the movie has been removed while updating the favourites list </td>
+        <td>"Username": ----<br>
+          "Password": ----<br>
+          "Email": ----<br>
+          "Birthday": xxxx/xx/xx<br>
+          "Favourites": []<br></Td>
       </tr>
       <tr>
         <td> Allows a user to delete their account </td>
         <td> /user/:username </td>
         <td> DELETE </td>
         <td> Gives user a message that their account has been deleted while removing the account info from the users data </td>
+        <td> Username has been deleted. </td>
       </tr>
 
 
