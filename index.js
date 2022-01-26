@@ -2,12 +2,16 @@ const express = require('express'),
   morgan = require('morgan'),
   bodyParser =require('body-parser'),
   mongoose =require('mongoose'),
-  models =require('./models.js');
+  models =require('./models.js'),
+  { check, validationResult} = require('express-validator');
 
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 let auth = require('./auth')(app);
+
+const cors = require('cors');
+app.use(cors());
 const passport =require('passport');
 require('./passport');
 const Movies = models.Movie;
@@ -63,7 +67,17 @@ app.get('/directors/:name', passport.authenticate('jwt', {session: false}), (req
   });
 });
 
-app.post('/users', (req, res) => {
+app.post('/users', [
+  check('Username', 'Username is required').not().isEmpty(),
+  check('Username', 'Username contains non alphanumeric characters').isAlphanumeric(),
+  check('Password', 'Password is required').not().isEmpty(),
+  check('Email', 'Email is not valid').isEmail()
+], (req, res) => {
+  let errors = validationResult(req);
+  if(!errors.isEmpty()) {
+    return res.status(422).json({errors: errors.array()});
+  }
+  let hashedPassword = Users.hashPassword(req.body.Password);
   Users.findOne({ Username: req.body.Username })
     .then((user) => {
       if (user) {
@@ -71,7 +85,7 @@ app.post('/users', (req, res) => {
       } else {
         Users.create({
             Username: req.body.Username,
-            Password: req.body.Password,
+            Password: hashedPassword,
             Email: req.body.Email,
             Birthday: req.body.Birthday
           })
@@ -88,11 +102,21 @@ app.post('/users', (req, res) => {
     });
 });
 
-app.put('/users/:Username', passport.authenticate('jwt', {session: false}), (req, res) => {
+app.put('/users/:Username', passport.authenticate('jwt', {session: false}), [
+  check('Username', 'Username is required').not().isEmpty(),
+  check('Username', 'Username contains non alphanumeric characters').isAlphanumeric(),
+  check('Password', 'Password is required').not().isEmpty(),
+  check('Email', 'Email is not valid').isEmail()
+], (req, res) => {
+  let errors = validationResult(req);
+  if(!errors.isEmpty()) {
+    return res.status(422).json({errors: errors.array()});
+  }
+  let hashedPassword = Users.hashPassword(req.body.Password);
   Users.findOneAndUpdate({ Username: req.params.Username }, { $set:
     {
       Username: req.body.Username,
-      Password: req.body.Password,
+      Password: hashedPassword,
       Email: req.body.Email,
       Birthday: req.body.Birthday
     }
