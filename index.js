@@ -17,7 +17,7 @@ require('./passport');
 const Movies = models.Movie;
 const Users = models.User;
 
-mongoose.connect('mongodb://localhost:27017/MovieApiDB', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(process.env.Connection_URL, { useNewUrlParser: true, useUnifiedTopology: true });
 
 app.use(morgan('common'));
 
