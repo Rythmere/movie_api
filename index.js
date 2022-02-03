@@ -23,7 +23,7 @@ app.use(morgan('common'));
 
 app.use(express.static('public'));
 
-app.get('/movies', passport.authenticate('jwt', {session: false}), (req, res) => {
+app.get('/movies' /*, passport.authenticate('jwt', {session: false})*/, (req, res) => {
   Movies.find().then((movie) => {
     res.json(movie);
   })
