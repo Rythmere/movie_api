@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 let auth = require('./auth')(app);
 
 const cors = require('cors');
-app.use(cors());
+express.use(cors());
 const passport =require('passport');
 require('./passport');
 const Movies = models.Movie;
