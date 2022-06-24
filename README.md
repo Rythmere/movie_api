@@ -35,15 +35,16 @@ Movie api is a server side component for a movies web pag that allows a user to 
 
 ### Endpoints
 
-/
-/users
-/users/[Username]
-/users/[Username]/movies
-/users/[Username]/movies/[MovieID]
-/movies
-/movies/[Title]
-/genre/[Name]
-/directors/[Name]
+- /
+- /login
+- /users
+- /users/[Username]
+- /users/[Username]/movies
+- /users/[Username]/movies/[MovieID]
+- /movies
+- /movies/[Title]
+- /genres/[Name]
+- /directors/[Name]
 
 ### Dependencies
 
