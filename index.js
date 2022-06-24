@@ -5,6 +5,7 @@ const express = require('express'),
   models =require('./models.js'),
   { check, validationResult} = require('express-validator');
 
+
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -17,12 +18,20 @@ require('./passport');
 const Movies = models.Movie;
 const Users = models.User;
 
+// Connects to MongoDb
 mongoose.connect(process.env.Connection_URL, { useNewUrlParser: true, useUnifiedTopology: true });
 
 app.use(morgan('common'));
 
 app.use(express.static('public'));
 
+/**
+ * @method get
+ * Returns a list of all movies
+ * Request body: Bearer token
+ * @returns array of movies objects
+ * @requires passport
+ */
 app.get('/movies', passport.authenticate('jwt', {session: false}), (req, res) => {
   Movies.find().then((movie) => {
     res.json(movie);
@@ -33,10 +42,23 @@ app.get('/movies', passport.authenticate('jwt', {session: false}), (req, res) =>
   });
 });
 
+/**
+ * @method get
+ * Returns welcome message for '/' request URL
+ * @returns Welcome message
+ */
 app.get('/', (req, res) => {
   res.send('Welcome to Movie api');
 });
 
+/**
+ * @method get
+ * Returns data for a single movie (description, genre, director, image URL, whether it’s featured or not)
+ * Request body: Bearer token
+ * @param Movie title
+ * @returns movie object
+ * @requires passport
+ */
 app.get('/movies/:title', passport.authenticate('jwt', {session: false}), (req, res) => {
   Movies.findOne({Title: req.params.title}).then((movie) => {
     res.json(movie);
@@ -47,6 +69,14 @@ app.get('/movies/:title', passport.authenticate('jwt', {session: false}), (req, 
   });
 });
 
+/**
+ * @method get
+ * Returns data about a genre (description)
+ * Request body: Bearer token
+ * @param  Genre name
+ * @returns genre object
+ * @requires passport
+ */
 app.get('/genres/:name', passport.authenticate('jwt', {session: false}), (req, res) => {
   Movies.findOne({"Genre.Name": req.params.name}).then((movie)=>{
     res.json(movie.Genre);
@@ -57,6 +87,14 @@ app.get('/genres/:name', passport.authenticate('jwt', {session: false}), (req, r
   });
 });
 
+/**
+ * @method get
+ * Returns data about a Director (Bio, and birthyear)
+ * Request body: Bearer token
+ * @param Director name
+ * @returns Director object
+ * @requires passport
+ */
 app.get('/directors/:name', passport.authenticate('jwt', {session: false}), (req, res) => {
   Movies.findOne({"Director.Name": req.params.name}).then((movie)=>{
     res.json(movie.Director);
@@ -67,6 +105,14 @@ app.get('/directors/:name', passport.authenticate('jwt', {session: false}), (req
   });
 });
 
+/**
+ * @method get
+ * Returns data on a single user (username, email, password, and birthday) 
+ * Request body: Bearer token
+ * @param Username
+ * @returns user object
+ * @requires passport
+ */
 app.get('/users/:Username', passport.authenticate('jwt', {session: false}), (req, res)=> {
   Users.findOne({ Username: req.params.Username}).then((user)=> {
     res.json(user);
@@ -76,6 +122,12 @@ app.get('/users/:Username', passport.authenticate('jwt', {session: false}), (req
   })
 });
 
+/**
+ * @method post
+ * Registers a new user and adds there acount info to the database.  Username, Password & Email are required fields.
+ * Request body: JSON with user information
+ * @returns user object
+ */
 app.post('/users', [
   check('Username', 'Username is required').not().isEmpty(),
   check('Username', 'Username contains non alphanumeric characters').isAlphanumeric(),
@@ -111,6 +163,14 @@ app.post('/users', [
     });
 });
 
+/**
+ * @method put
+ * Allow users to update their account and returns new user object (Username, email, password, and birthday are required even if they are not being changed)
+ * Request body: Bearer token, updated user info
+ * @param Username
+ * @returns updated user object
+ * @requires passport
+ */
 app.put('/users/:Username', passport.authenticate('jwt', {session: false}), [
   check('Username', 'Username is required').not().isEmpty(),
   check('Username', 'Username contains non alphanumeric characters').isAlphanumeric(),
@@ -141,6 +201,15 @@ app.put('/users/:Username', passport.authenticate('jwt', {session: false}), [
   });
 });
 
+/**
+ * @method post
+ * Adds a movie to a users list of favourites
+ * Request body: Bearer token
+ * @param username
+ * @param movieId
+ * @returns updated user object
+ * @requires passport
+ */
 app.post('/users/:Username/movies/:MovieID', passport.authenticate('jwt', {session: false}), (req, res) => {
   Users.findOneAndUpdate({ Username: req.params.Username }, {
      $push: { Favourites: req.params.MovieID }
@@ -156,6 +225,15 @@ app.post('/users/:Username/movies/:MovieID', passport.authenticate('jwt', {sessi
   });
 });
 
+/**
+ * @method delete
+ * Removes a movie from a users list of favourites
+ * Request body: Bearer token
+ * @param username
+ * @param movieId
+ * @returns updated user object
+ * @requires passport
+ */
 app.delete('/users/:Username/movies/:MovieID', passport.authenticate('jwt', {session: false}), (req, res) => {
   Users.findOneAndUpdate({ Username: req.params.Username }, {
      $pull: { Favourites: req.params.MovieID }
@@ -171,6 +249,14 @@ app.delete('/users/:Username/movies/:MovieID', passport.authenticate('jwt', {ses
   });
 });
 
+/**
+ * @method get
+ * Returns a users list of favourite movies
+ * Request body: Bearer token
+ * @param Username
+ * @returns array of favourite movies (movieId)
+ * @requires passport
+ */
 app.get('/users/:Username/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
   Users.findOne({ Username: req.params.Username })
     .then((user) => {
@@ -186,6 +272,14 @@ app.get('/users/:Username/movies', passport.authenticate('jwt', { session: false
     });
 });
 
+/**
+ * @method get
+ * Allows existing users to deregister
+ * Request body: Bearer token
+ * @param Username
+ * @returns success message
+ * @requires passport
+ */
 app.delete('/users/:username', passport.authenticate('jwt', {session: false}), (req, res) => {
   Users.findOneAndRemove({Username: req.params.username}).then((user)=>{
     if(!user) {
